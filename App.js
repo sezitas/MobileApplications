@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text } from 'react-native';
-import SendEmail from './SendEmail'
+import { Platform, StyleSheet, Text, Button } from 'react-native';
+
+import { Tabs } from './Tabs';
 
 export default class App extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
-      <SendEmail/>
+      <Tabs />
     );
   }
 }
 
 const styles = StyleSheet.create({
-
 });
-
