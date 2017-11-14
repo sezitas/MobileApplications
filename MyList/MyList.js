@@ -40,7 +40,7 @@ export default class MyList extends Component {
 
     nextScene = () => { 
         console.log(this.props.navigation);
-        this.props.navigation.navigate('EditItemScene');
+        this.props.navigation.navigate('EditItemScene'); // not working
     };
 
     render() {
