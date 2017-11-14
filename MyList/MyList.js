@@ -1,13 +1,9 @@
-//import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { List, ListItem } from 'react-native-elements';
+import { View, Text, StyleSheet, FlatList, TouchableHighlight } from 'react-native';
 
-
-// create a component
 export default class MyList extends Component {
-    constructor(props) {
-        super(props);
+    constructor(props) { 
+        super(props); 
         this.state = {
             loading: false,
             data: [],
@@ -17,8 +13,10 @@ export default class MyList extends Component {
             refreshing: false,
         };
     }
+
     componentDidMount() {
         this.makeRemoteRequest();
+
     }
 
     makeRemoteRequest = () => {
@@ -28,7 +26,6 @@ export default class MyList extends Component {
         fetch(url)
             .then(res => res.json())
             .then(res => {
-                console.log(res);
                 this.setState({
                     data: page === 1 ? res.results : [...this.state.data, ...res.results],
                     error: res.error || null,
@@ -41,39 +38,33 @@ export default class MyList extends Component {
             });
     };
 
+    nextScene = () => { 
+        console.log(this.props.navigation);
+        this.props.navigation.navigate('EditItemScene');
+    };
+
     render() {
         return (
-            <List>
-                <FlatList
-                    Style={styles.list}
-                    data={this.state.data}
-                    renderItem={({ item }) => (
-                        <ListItem
-                            title={`${item.name.first} ${item.name.last}`}
-                        />
-                    )}
-                    keyExtractor={item => item.email}
-                />
-            </List>
+            <FlatList
+                Style={styles.list}
+                data={this.state.data}
+                renderItem={({ item }) => (
+                    <TouchableHighlight onPress={this.nextScene}>
+                        <Text style={styles.item}>
+                            {item.name.first} + {item.name.last}
+                        </Text>
+                    </TouchableHighlight>
+                )}
+                keyExtractor={item => item.email}
+            />
         );
     }
 
 }
 
 const styles = StyleSheet.create({
-    itemText: {
-        margin: 30,
-    },
-    innerItem: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#2c3e50',
-        padding: 1,
-    },
     item: {
-        height: 40,
+        height: 35,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
@@ -84,12 +75,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center"
-    },
-    mainContainer: {
-        flex: 5,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'stretch',
-    },
+    }
 });
 
