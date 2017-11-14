@@ -5,8 +5,8 @@ import EmailScreen from './EmailScreen';
 import MyList from './MyList'
 
 export const Tabs = TabNavigator({
-    Email: { screen: EmailScreen },
     List: { screen: MyList },
+    Email: { screen: EmailScreen },
 }, {
         tabBarOptions: {
             style: {

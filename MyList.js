@@ -1,53 +1,95 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, List, FlatList, TouchableNativeFeedback } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { List, ListItem } from 'react-native-elements';
+
 
 // create a component
 export default class MyList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            listData: [
-                { key: 'Devin' },
-                { key: 'Jackson' },
-                { key: 'James' },
-                { key: 'Joel' },
-                { key: 'John' },
-                { key: 'Jillian' },
-                { key: 'Jimmy' },
-                { key: 'Julie' },
-            ],
+            loading: false,
+            data: [],
+            page: 1,
+            seed: 1,
+            error: null,
+            refreshing: false,
         };
     }
+    componentDidMount() {
+        this.makeRemoteRequest();
+    }
+
+    makeRemoteRequest = () => {
+        const { page, seed } = this.state;
+        const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=20`;
+        this.setState({ loading: true });
+        fetch(url)
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+                this.setState({
+                    data: page === 1 ? res.results : [...this.state.data, ...res.results],
+                    error: res.error || null,
+                    loading: false,
+                    refreshing: false
+                });
+            })
+            .catch(error => {
+                this.setState({ error, loading: false });
+            });
+    };
+
     render() {
         return (
-            <View style={styles.mainContainer}>
-                <FlatList data={this.state.listData}
-                    renderItem={({ item }) =>
-                        <TouchableNativeFeedback >
-                            <Text style={styles.item}>
-                                {item.key}
-                            </Text>
-                        </TouchableNativeFeedback>
-                    }
+            <List>
+                <FlatList
+                    Style={styles.list}
+                    data={this.state.data}
+                    renderItem={({ item }) => (
+                        <ListItem
+                            title={`${item.name.first} ${item.name.last}`}
+                        />
+                    )}
+                    keyExtractor={item => item.email}
                 />
-            </View>
+            </List>
         );
     }
+
 }
 
-// define your styles
 const styles = StyleSheet.create({
-    item: {
-        padding: 10,
-        fontSize: 16,
-        fontWeight: 'bold'
+    itemText: {
+        margin: 30,
     },
-    mainContainer: {
+    innerItem: {
         flex: 1,
-        padding: 20,
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#2c3e50',
+        padding: 1,
+    },
+    item: {
+        height: 40,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#27ae60',
+    },
+    list: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    mainContainer: {
+        flex: 5,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
     },
 });
 
