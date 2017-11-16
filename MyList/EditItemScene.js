@@ -11,19 +11,19 @@ export default class EditItemScene extends Component {
 
     handleButtonPress = () => {
         const { params } = this.props.navigation.state;
-        const { navigate } = this.props.navigation;
-        console.log(this.state.inputText);
-        params.onChange(params.id, this.state.inputText); 
-        navigate('MyList');
+        params.onChange(params.id, this.state.inputText);
+        this.props.navigation.goBack();
     }
 
 
     render() {
         return (
             <View style={styles.container}>
-                <TextInput style={styles.textInput}
+                <TextInput
+                    style={styles.textInput}
+                    underlineColorAndroid={'transparent'}
                     defaultValue={this.state.inputText}
-                    onChangeText={(inputText) => this.setState({inputText})}
+                    onChangeText={(inputText) => this.setState({ inputText })}
                 />
                 <Button
                     title='Done'
@@ -37,8 +37,12 @@ export default class EditItemScene extends Component {
 const styles = StyleSheet.create({
     textInput: {
         height: 40,
+        textAlign: 'center',
+        backgroundColor: '#27ae60'
     },
     container: {
-        backgroundColor: '#ecf0f1',
+        padding: 10,
+        flex: 1,
+        backgroundColor: '#2ecc71',
     },
 });

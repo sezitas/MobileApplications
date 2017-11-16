@@ -6,46 +6,55 @@ export default class MyList extends Component {
         super(props);
         this.state = {
             loading: false,
-            data: [],
+            data: this.getInitialListData(),
             page: 1,
             seed: 20,
             error: null,
             refreshing: false,
+            selected: (new Map(): Map<string, boolean>)
         };
     }
-
-    componentDidMount() {
-        this.makeRemoteRequest();
-
+    
+    getInitialListData = () => {
+        var data = [
+            { id: 0, name: 'Bob' },
+            { id: 1, name: 'Nanette Kong' },
+            { id: 2, name: 'Daren Saavedra' },
+            { id: 3, name: 'Gladis Mayhew' },
+            { id: 4, name: 'Dori Juarez' },
+            { id: 5, name: 'Del Moll' },
+            { id: 6, name: 'Everett Williamson' },
+            { id: 7, name: 'Nadine Watts' },
+            { id: 8, name: 'Phyllis Gonzales' },
+            { id: 9, name: 'Leo Nelson' },
+            { id: 10, name: 'Frederick Barrett' },
+            { id: 11, name: 'Kara Shaw' },
+            { id: 12, name: 'Jennifer Cooper' },
+            { id: 13, name: 'Theresa Schmidt' },
+            { id: 14, name: 'Lauren Bennett' },
+            { id: 15, name: 'Sheri Coleman' },           
+        ];
+        return data;
     }
 
-    makeRemoteRequest = () => {
-        const { page, seed } = this.state;
-        const url = `https://randomuser.me/api/?seed=${seed}&page=${page}&results=20`;
-        this.setState({ loading: true });
-        fetch(url)
-            .then(res => res.json())
-            .then(res => {
-                this.setState({
-                    data: page === 1 ? res.results : [...this.state.data, ...res.results],
-                    error: res.error || null,
-                    loading: false,
-                    refreshing: false
-                });
-            })
-            .catch(error => {
-                this.setState({ error, loading: false });
-            });
-    };
+    handleListItemChange = (index, value) => {
+        const newData = [...this.state.data];
+        newData[index].name = value;
+        this.setState( (state) => { 
+            data = newData;
+            const selected = new Map(state.selected);
+            selected.set(index, !selected.get(index)); 
+            return { selected, data};
+        });
+    }
 
-    changeItemValue = (id, value) => {
-        var index = this.state.data.findIndex(x => x.email = id);
-        const newData = this.state.data;
-        newData[index].name.first = value;
-        console.log('MyList::originalArray: ' + this.state.data[index].name.first);
-        console.log('MyList::newArray: ' + newData[index].name.first);
-        this.setState({ data: newData });
-        console.log('MyList::originalArray after setState: ' + this.state.data[index].name.first);
+    renderFlatListItem(item) {
+        return (
+            <View key={"parentView" + item.topicCat} style={styles.gridItem}>
+                <Text key={"topicCat" + item.topicCat} style={styles.topicCatText}>{item.topicCat}</Text>
+                <GridView key={"gridView" + item.topicCat} gridViewData={item.topicCatData} openSubCat={this._openSubCat} parentKey={"Catalgue"} />
+            </View>
+        )
     }
 
     render() {
@@ -53,22 +62,24 @@ export default class MyList extends Component {
             <FlatList
                 Style={styles.list}
                 data={this.state.data}
+                extraData={this.state} 
                 renderItem={({ item }) => (
                     <TouchableHighlight
+                        // selected={this.selected}
                         style={styles.touchableItem}
                         onPress={() => {
                             this.props.navigation.navigate('EditItemScene', {
-                                itemText: item.name.first,
-                                id: item.email,
-                                onChange: this.changeItemValue
+                                id: item.id,
+                                itemText: item.name,
+                                onChange: this.handleListItemChange
                             })
                         }}>
                         <Text style={styles.item}>
-                            {item.name.first}
+                            {item.name}
                         </Text>
                     </TouchableHighlight>
                 )}
-                keyExtractor={item => item.email}
+                keyExtractor={item => item.id}
             />
         );
     }

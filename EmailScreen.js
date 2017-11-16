@@ -4,46 +4,6 @@ import {
     View, Image, Button, Alert, Linking, KeyboardAvoidingView
 } from 'react-native';
 
-class EmailReport extends Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return (
-            <KeyboardAvoidingView
-                behavior="padding"
-                style={styles.mainComponent}>
-                <View style={styles.textComponent}>
-                    <TextInput
-                        underlineColorAndroid={'transparent'}
-                        style={styles.textInput}
-                        placeholder="email"
-                        onChangeText={(text) => this.props.onChangeMail(text)}
-                    />
-                    <TextInput
-                        underlineColorAndroid={'transparent'}
-                        style={styles.textInput}
-                        placeholder="subject"
-                        onChangeText={(text) => this.props.onChangeSubject(text)}
-                    />
-                    <TextInput
-                        underlineColorAndroid={'transparent'}
-                        style={styles.textInput}
-                        placeholder="content"
-                        onChangeText={(text) => this.props.onChangeBody(text)}
-                    />
-                    <TouchableOpacity>
-                        <Text style={styles.button}
-                            onPress={() => { this.props.onPressButton() }}>
-                            Send email!
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </KeyboardAvoidingView>
-        );
-    }
-
-}
 
 export default class EmailScreen extends Component {
     constructor(props) {
@@ -58,21 +18,9 @@ export default class EmailScreen extends Component {
         title: 'Email Screen',
     }
 
-    onPressButton = () => {
+    handleButtonPress = () => {
         console.log(this.state);
         Linking.openURL(`mailto:${this.state.mail}?subject=${this.state.subject}&body=${this.state.body}`)
-    }
-
-    onChangeMail = (mail) => {
-        this.setState({ mail })
-    }
-
-    onChangeSubject = (subject) => {
-        this.setState({ subject })
-    }
-
-    onChangeBody = (body) => {
-        this.setState({ body })
     }
 
     render() {
@@ -82,12 +30,37 @@ export default class EmailScreen extends Component {
                 <View style={styles.logoContainer}>
                     <Image style={styles.logo} source={require('./resources/images/CashFairy.png')} />
                 </View>
-                <EmailReport
-                    onChangeSubject={this.onChangeSubject}
-                    onChangeMail={this.onChangeMail}
-                    onChangeBody={this.onChangeBody}
-                    onPressButton={this.onPressButton}
-                />
+                <KeyboardAvoidingView
+                    behavior="padding"
+                    style={styles.mainComponent}>
+                    <View style={styles.textComponent}>
+                        <TextInput
+                            underlineColorAndroid={'transparent'}
+                            style={styles.textInput}
+                            placeholder="mail"
+                            onChangeText={(mail) => this.setState({ mail })}
+                        />
+                        <TextInput
+                            underlineColorAndroid={'transparent'}
+                            style={styles.textInput}
+                            placeholder="subject"
+                            onChangeText={(subject) => this.setState({ subject })}
+                        />
+                        <TextInput
+                            underlineColorAndroid={'transparent'}
+                            style={styles.textInput}
+                            placeholder="content"
+                            onChangeText={(body) => this.setState({ body })}
+                        />
+                        <TouchableOpacity>
+                            <Text
+                                style={styles.button}
+                                onPress={this.handleButtonPress}>
+                                Send email!
+                        </Text>
+                        </TouchableOpacity>
+                    </View>
+                </KeyboardAvoidingView>
             </View>
         );
     }
