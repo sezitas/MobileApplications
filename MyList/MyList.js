@@ -8,7 +8,7 @@ export default class MyList extends Component {
             loading: false,
             data: [],
             page: 1,
-            seed: 1,
+            seed: 20,
             error: null,
             refreshing: false,
         };
@@ -38,8 +38,14 @@ export default class MyList extends Component {
             });
     };
 
-    changeItemValue = (index, value) => {
-        this.setstate(data[index] = value)
+    changeItemValue = (id, value) => {
+        var index = this.state.data.findIndex(x => x.email = id);
+        const newData = this.state.data;
+        newData[index].name.first = value;
+        console.log('MyList::originalArray: ' + this.state.data[index].name.first);
+        console.log('MyList::newArray: ' + newData[index].name.first);
+        this.setState({ data: newData });
+        console.log('MyList::originalArray after setState: ' + this.state.data[index].name.first);
     }
 
     render() {
@@ -48,12 +54,15 @@ export default class MyList extends Component {
                 Style={styles.list}
                 data={this.state.data}
                 renderItem={({ item }) => (
-                    <TouchableHighlight onPress={() => {
-                        this.props.navigation.navigate('EditItemScene', { 
-                            itemText: item.name.first,
-                            id: item.email, 
-                            onChange: this.changeItemValue })
-                    }}>
+                    <TouchableHighlight
+                        style={styles.touchableItem}
+                        onPress={() => {
+                            this.props.navigation.navigate('EditItemScene', {
+                                itemText: item.name.first,
+                                id: item.email,
+                                onChange: this.changeItemValue
+                            })
+                        }}>
                         <Text style={styles.item}>
                             {item.name.first}
                         </Text>
@@ -67,7 +76,15 @@ export default class MyList extends Component {
 }
 
 const styles = StyleSheet.create({
+    touchableItem: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     item: {
+        fontWeight: 'bold',
+        fontSize: 16,
         height: 35,
         flex: 1,
         flexDirection: 'row',

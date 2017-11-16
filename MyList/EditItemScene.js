@@ -1,21 +1,33 @@
 import React, { Component } from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, TextInput, StyleSheet, Button } from 'react-native';
 
 export default class EditItemScene extends Component {
     constructor(props) {
         super(props)
+        this.state = {
+            inputText: this.props.navigation.state.params.itemText
+        };
     }
 
-    render() {
+    handleButtonPress = () => {
+        const { params } = this.props.navigation.state;
         const { navigate } = this.props.navigation;
+        console.log(this.state.inputText);
+        params.onChange(params.id, this.state.inputText); 
+        navigate('MyList');
+    }
+
+
+    render() {
         return (
             <View style={styles.container}>
                 <TextInput style={styles.textInput}
-                    value={() => 
-                        { return ( this.props.navigation.state.params.itemText ) }}
-                    onChangetext={(text) => {
-                        this.props.navigation.state.params.onChange(this.props.navigation.state.params.id, text)
-                    }}
+                    defaultValue={this.state.inputText}
+                    onChangeText={(inputText) => this.setState({inputText})}
+                />
+                <Button
+                    title='Done'
+                    onPress={this.handleButtonPress}
                 />
             </View>
         );
