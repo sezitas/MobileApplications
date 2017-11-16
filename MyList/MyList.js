@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableHighlight } from 'react-native';
 
 export default class MyList extends Component {
-    constructor(props) { 
-        super(props); 
+    constructor(props) {
+        super(props);
         this.state = {
             loading: false,
             data: [],
@@ -38,10 +38,9 @@ export default class MyList extends Component {
             });
     };
 
-    nextScene = () => { 
-        console.log(this.props.navigation);
-        this.props.navigation.navigate('EditItemScene'); // not working
-    };
+    changeItemValue = (index, value) => {
+        this.setstate(data[index] = value)
+    }
 
     render() {
         return (
@@ -49,9 +48,14 @@ export default class MyList extends Component {
                 Style={styles.list}
                 data={this.state.data}
                 renderItem={({ item }) => (
-                    <TouchableHighlight onPress={this.nextScene}>
+                    <TouchableHighlight onPress={() => {
+                        this.props.navigation.navigate('EditItemScene', { 
+                            itemText: item.name.first,
+                            id: item.email, 
+                            onChange: this.changeItemValue })
+                    }}>
                         <Text style={styles.item}>
-                            {item.name.first} + {item.name.last}
+                            {item.name.first}
                         </Text>
                     </TouchableHighlight>
                 )}

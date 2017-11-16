@@ -5,17 +5,11 @@ import { StackNavigator } from 'react-navigation';
 import MyList from './MyList';
 import EditItemScene from './EditItemScene';
 
-export const ListScene = StackNavigator({
-    MyList: {
-        screen: MyList, navigationOptions: {
-            headerTitle: 'MyList',
-        },
+export const ListScene = StackNavigator(
+    {
+        MyList: { screen: MyList },
+        EditItemScene: { screen: EditItemScene }
     },
-    EditItemScene: {
-        screen: EditItemScene,
-        navigationOptions: {
-            headerTitle: 'EditItemScene',
-        },
-    }
-
-});
+    {
+        headerMode: 'none'
+    });

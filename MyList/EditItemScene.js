@@ -1,22 +1,32 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, TextInput, StyleSheet } from 'react-native';
 
 export default class EditItemScene extends Component {
+    constructor(props) {
+        super(props)
+    }
+
     render() {
+        const { navigate } = this.props.navigation;
         return (
             <View style={styles.container}>
-                <Text>MyClass</Text>
+                <TextInput style={styles.textInput}
+                    value={() => 
+                        { return ( this.props.navigation.state.params.itemText ) }}
+                    onChangetext={(text) => {
+                        this.props.navigation.state.params.onChange(this.props.navigation.state.params.id, text)
+                    }}
+                />
             </View>
         );
     }
 }
 
-// define your styles
 const styles = StyleSheet.create({
+    textInput: {
+        height: 40,
+    },
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#2c3e50',
+        backgroundColor: '#ecf0f1',
     },
 });

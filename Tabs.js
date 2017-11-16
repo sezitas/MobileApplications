@@ -2,14 +2,16 @@ import React from 'react';
 import { TabNavigator } from 'react-navigation';
 
 import EmailScreen from './EmailScreen';
-import ListScene from './MyList/MyList';
+import ListSceneWrapper from './MyList/ListSceneWrapper';
 
 
 export const Tabs = TabNavigator({
-    ListScene: { screen: ListScene },
-    Email: { screen: EmailScreen },
-    // EditItemScene: { screen: EditItemScene }
-
+    ListSceneWrapper: { 
+        screen: ListSceneWrapper 
+    },
+    Email: { 
+        screen: EmailScreen 
+    },
 }, {
         tabBarOptions: {
             style: {
